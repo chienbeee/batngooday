@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Mời Đám Cưới - BẤT NGỜ Ở ĐÂY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+    <div class="overlay"></div>
+    <div class="login-card">
+        <h2>💌 Thiệp Mời Trân Trọng</h2>
+        <p>Vui lòng nhập họ và tên của bạn để mở thiệp mời!</p>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="fullname" name="fullname" placeholder="Nhập họ và tên của bạn..." required autocomplete="off">
+            </div>
+            <button type="submit" class="btn-submit">Đăng Nhập Xem Thiệp</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const fullname = document.getElementById('fullname').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fullname })
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    // Lưu tên vào sessionStorage để trang thiệp mời đọc lại
+                    sessionStorage.setItem('guestName', result.fullname);
+                    // Chuyển hướng sang trang thiệp mời
+                    window.location.href = 'invite.html';
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('Có lỗi xảy ra, vui lòng thử lại!');
+            }
+        });
+    </script>
+</body>
+</html>
