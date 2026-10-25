@@ -11,7 +11,7 @@
         <div class="header-section">
             <span class="sub-title">Save The Date</span>
             <h1>Lễ Thành Hôn</h1>
-            <div class="couple-names">Hoàng Chiến & Demo1</div>
+            <div class="couple-names">Hoàng Chiến &amp; Demo1</div>
         </div>
 
         <div class="invitation-content">
@@ -19,11 +19,12 @@
             <div class="guest-name-box" id="displayGuestName">Đang tải tên...</div>
             
             <p class="intro-text">
-                Đến tham dự buổi lễ thành hôn &amp; chung vui cùng gia đình chúng tôi:
+                Đến tham dự buổi lễ thành hôn &amp; chung vui cùng gia đình chúng tôi!
             </p>
 
-            <div class="family-info" style="margin-bottom: 25px; text-align: center; color: #555;">
-                <p><strong>Nhà trai:</strong> Con ông <strong>Bùi Văn Xâm</strong> &amp; Bà <strong>Nguyễn Thị Minh</strong></p>
+            <!-- Thông tin Gia đình -->
+            <div class="family-info">
+                <p><strong>Nhà trai:</strong> Ông <strong>Bùi Văn Xâm</strong> &amp; Bà <strong>Nguyễn Thị Minh</strong></p>
                 <p style="margin-top: 5px;"><strong>Chú rể:</strong> Bùi Hoàng Chiến &nbsp;|&nbsp; <strong>Cô dâu:</strong> Demo1</p>
             </div>
 
@@ -42,6 +43,29 @@
                 </div>
             </div>
 
+            <!-- Bộ đếm ngược thời gian -->
+            <div class="countdown-section">
+                <h3>⏳ Thời gian đếm ngược đến ngày hạnh phúc</h3>
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="days">00</span>
+                        <span class="countdown-label">Ngày</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="hours">00</span>
+                        <span class="countdown-label">Giờ</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="minutes">00</span>
+                        <span class="countdown-label">Phút</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="seconds">00</span>
+                        <span class="countdown-label">Giây</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="message-section">
                 <h3>Sự hiện diện của quý khách là niềm vinh hạnh lớn cho gia đình chúng tôi!</h3>
             </div>
@@ -53,14 +77,37 @@
     </div>
 
     <script>
-        // Lấy tên khách từ sessionStorage đã lưu lúc đăng nhập
+        // 1. Hiển thị tên khách từ sessionStorage
         const guestName = sessionStorage.getItem('guestName');
         if (guestName) {
             document.getElementById('displayGuestName').innerText = guestName;
         } else {
-            // Nếu truy cập thẳng trang invite.html mà chưa nhập tên
             document.getElementById('displayGuestName').innerText = "Khách Quý";
         }
+
+        // 2. Chạy bộ đếm ngược đến 16:00 ngày 12/11/2026
+        const weddingDate = new Date("2026-11-12T16:00:00").getTime();
+
+        const countdown = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdown);
+                document.querySelector(".countdown-section").innerHTML = "<h3>Đám cưới đã diễn ra! Chân thành cảm ơn quý khách!</h3>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+        }, 1000);
     </script>
 </body>
 </html>
